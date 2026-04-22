@@ -57,14 +57,3 @@ Validate at the edge, fail fast. Every POST checks required fields and returns 4
 ## Conventional Commits
 
 `feat:` new functionality, `fix:` bug fixes, `refactor:` restructuring, `chore:` config and tooling.
-
-## Plan Mode
-
-Plans are written to `.claude/plans/` via the built-in plan mode. Each plan includes problem statement, data model, endpoints, UI components, and implementation order.
-
-## Bug Tracking
-
-When a bug is found, append to `BUGS.md`:
-
-| What broke | Root cause | Fix applied | Status |
-| ---------- | ---------- | ----------- | ------ |
