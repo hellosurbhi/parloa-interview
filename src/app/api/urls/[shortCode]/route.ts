@@ -20,7 +20,7 @@ export async function DELETE(
       throw new ApiError(404, "URL_NOT_FOUND", "Short URL not found");
     }
 
-    if (row.user_id !== user.id) {
+    if (!row.user_id || row.user_id !== user.id) {
       throw new ApiError(403, "FORBIDDEN", "You can only delete your own URLs");
     }
 
