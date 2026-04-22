@@ -1,6 +1,6 @@
 "use client";
 
-import { useSession, signIn, signOut } from "next-auth/react";
+import { useSession, signOut } from "next-auth/react";
 
 export default function UserMenu() {
   const { data: session, status } = useSession();
@@ -20,7 +20,9 @@ export default function UserMenu() {
       {session.user.image && (
         <img
           src={session.user.image}
-          alt=""
+          alt={`${session.user.name ?? "User"} avatar`}
+          width={28}
+          height={28}
           className="h-7 w-7 rounded-full"
         />
       )}
@@ -29,7 +31,7 @@ export default function UserMenu() {
       </span>
       <button
         onClick={() => signOut()}
-        className="text-xs text-neutral-400 hover:text-neutral-600 transition-colors font-[family-name:var(--font-geist-mono)]"
+        className="text-xs text-neutral-500 hover:text-neutral-700 transition-colors font-[family-name:var(--font-geist-mono)] focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2 rounded"
       >
         Sign out
       </button>
