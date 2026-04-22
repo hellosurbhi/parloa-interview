@@ -1,5 +1,46 @@
 # Changelog
 
+## Accessibility improvements (WCAG AA)
+
+### What changed
+- Added descriptive alt text and explicit width/height to avatar image
+- Added focus ring on sign-out button
+- Added visible labels to all form inputs
+- Added focus rings and 48px touch targets to interactive elements
+- Fixed nav and footer text contrast to meet WCAG AA (4.5:1 minimum)
+
+### Files affected
+- `src/components/UserMenu.tsx` — avatar alt, focus ring
+- `src/components/UrlForm.tsx` — form labels, focus rings
+- `src/app/page.tsx` / `src/app/layout.tsx` — contrast fixes
+
+## Design polish
+
+### What changed
+- Removed duplicate sign-in link from nav
+- Left-aligned hero text, bumped font weight, added accent underline
+- Show page content immediately during session loading (no layout shift)
+
+### Files affected
+- `src/app/page.tsx` — hero layout, loading behaviour
+- `src/components/UserMenu.tsx` — removed duplicate sign-in
+
+## Migrate data layer from SQLite to Upstash Redis
+
+### What changed
+- Built Redis-backed url-store module (createUrl, getUrlForRedirect, listUserUrls, deleteUrl)
+- Migrated POST/GET /api/urls, DELETE /api/urls/:shortCode, and /:shortCode redirect to Redis
+- Removed SQLite counter fallback — Redis INCR is the only ID source
+- Removed "stored in SQLite" copy from footer
+
+### Files affected
+- `src/lib/url-store.ts` — new Redis CRUD module
+- `src/app/api/urls/route.ts` — uses url-store
+- `src/app/api/urls/[shortCode]/route.ts` — uses url-store
+- `src/app/[shortCode]/route.ts` — uses url-store for redirect
+- `src/lib/utils.ts` — removed SQLite fallback
+- `src/app/page.tsx` — removed SQLite footer note
+
 ## Ship-it production hardening
 
 ### What changed

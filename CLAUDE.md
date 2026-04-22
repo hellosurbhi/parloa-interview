@@ -60,13 +60,7 @@ Validate at the edge, fail fast. Every POST checks required fields and returns 4
 
 ## Plan Mode
 
-When asked to plan, write to `PLAN.md`:
-
-1. Problem statement (one sentence)
-2. Data model (table name, columns, types, constraints)
-3. Endpoints (method, path, request body, response shape)
-4. UI components needed
-5. Implementation order with estimated complexity
+Plans are written to `.claude/plans/` via the built-in plan mode. Each plan includes problem statement, data model, endpoints, UI components, and implementation order.
 
 ## Bug Tracking
 
