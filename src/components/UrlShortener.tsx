@@ -195,57 +195,110 @@ export default function UrlShortener() {
         {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
       </div>
 
-      {urls.length > 0 && (
-        <div className="w-full mt-8 animate-reveal-delay">
-          <div className="h-px bg-neutral-200 mb-6" />
-          <h2 className="text-xs tracking-[0.2em] uppercase text-neutral-400 mb-4 font-[family-name:var(--font-geist-mono)]">
-            Your links
+      <div className="w-full mt-8 animate-reveal-delay">
+        <div className="h-px bg-neutral-200 mb-6" />
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-xs tracking-[0.2em] uppercase text-neutral-400 font-[family-name:var(--font-geist-mono)]">
+            Your links ({urls.length})
           </h2>
-          <ul className="space-y-3">
-            {urls.map((url) => (
-              <li
-                key={url.short_code}
-                className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 p-4 rounded-lg bg-white border border-neutral-100"
-              >
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2 mb-1">
-                    <a
-                      href={url.short_url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-sm font-medium text-neutral-900 font-[family-name:var(--font-geist-mono)] hover:underline"
-                    >
-                      {url.short_url.replace(/^https?:\/\//, "")}
-                    </a>
-                    {url.expires_at && (
-                      <span className="text-[10px] px-1.5 py-0.5 rounded bg-neutral-100 text-neutral-500 font-[family-name:var(--font-geist-mono)]">
-                        {timeUntil(url.expires_at)}
-                      </span>
-                    )}
-                  </div>
-                  <p className="text-sm text-neutral-400 truncate">
-                    {url.original_url}
-                  </p>
-                </div>
-                <div className="flex items-center gap-2 shrink-0">
-                  <button
-                    onClick={() => handleCopy(url.short_url, url.short_code)}
-                    className="text-xs px-3 py-1.5 rounded border border-neutral-200 text-neutral-500 hover:text-neutral-900 hover:border-neutral-300 transition-colors font-[family-name:var(--font-geist-mono)]"
-                  >
-                    {copied === url.short_code ? "Copied" : "Copy"}
-                  </button>
-                  <button
-                    onClick={() => handleDelete(url.short_code)}
-                    className="text-xs px-3 py-1.5 rounded border border-neutral-200 text-red-400 hover:text-red-600 hover:border-red-300 transition-colors font-[family-name:var(--font-geist-mono)]"
-                  >
-                    Delete
-                  </button>
-                </div>
-              </li>
-            ))}
-          </ul>
         </div>
-      )}
+
+        {urls.length === 0 ? (
+          <p className="text-sm text-neutral-300 text-center py-8 font-[family-name:var(--font-geist-mono)]">
+            No shortened URLs yet
+          </p>
+        ) : (
+          <div className="overflow-x-auto rounded-lg border border-neutral-200">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-neutral-200 bg-neutral-50">
+                  <th className="text-left px-4 py-2.5 text-[10px] tracking-[0.15em] uppercase text-neutral-400 font-medium font-[family-name:var(--font-geist-mono)]">
+                    Short URL
+                  </th>
+                  <th className="text-left px-4 py-2.5 text-[10px] tracking-[0.15em] uppercase text-neutral-400 font-medium font-[family-name:var(--font-geist-mono)] hidden sm:table-cell">
+                    Original
+                  </th>
+                  <th className="text-left px-4 py-2.5 text-[10px] tracking-[0.15em] uppercase text-neutral-400 font-medium font-[family-name:var(--font-geist-mono)]">
+                    Expiry
+                  </th>
+                  <th className="text-right px-4 py-2.5 text-[10px] tracking-[0.15em] uppercase text-neutral-400 font-medium font-[family-name:var(--font-geist-mono)]">
+                    Actions
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {urls.map((url, i) => {
+                  const expiryText = url.expires_at
+                    ? timeUntil(url.expires_at)
+                    : null;
+                  const isExpired = expiryText === "Expired";
+
+                  return (
+                    <tr
+                      key={url.short_code}
+                      className={`border-b border-neutral-100 last:border-0 ${
+                        i % 2 === 1 ? "bg-neutral-50/50" : "bg-white"
+                      } ${isExpired ? "opacity-50" : ""}`}
+                    >
+                      <td className="px-4 py-3">
+                        <a
+                          href={url.short_url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="font-medium text-neutral-900 font-[family-name:var(--font-geist-mono)] hover:underline"
+                        >
+                          /{url.short_code}
+                        </a>
+                      </td>
+                      <td
+                        className="px-4 py-3 max-w-[200px] truncate text-neutral-400 hidden sm:table-cell"
+                        title={url.original_url}
+                      >
+                        {url.original_url}
+                      </td>
+                      <td className="px-4 py-3">
+                        {expiryText ? (
+                          <span
+                            className={`text-[10px] px-2 py-0.5 rounded-full font-[family-name:var(--font-geist-mono)] ${
+                              isExpired
+                                ? "bg-red-50 text-red-500"
+                                : "bg-amber-50 text-amber-600"
+                            }`}
+                          >
+                            {expiryText}
+                          </span>
+                        ) : (
+                          <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-600 font-[family-name:var(--font-geist-mono)]">
+                            Active
+                          </span>
+                        )}
+                      </td>
+                      <td className="px-4 py-3 text-right">
+                        <div className="flex items-center justify-end gap-1.5">
+                          <button
+                            onClick={() =>
+                              handleCopy(url.short_url, url.short_code)
+                            }
+                            className="text-[11px] px-2.5 py-1 rounded border border-neutral-200 text-neutral-500 hover:text-neutral-900 hover:border-neutral-300 transition-colors font-[family-name:var(--font-geist-mono)]"
+                          >
+                            {copied === url.short_code ? "Copied" : "Copy"}
+                          </button>
+                          <button
+                            onClick={() => handleDelete(url.short_code)}
+                            className="text-[11px] px-2.5 py-1 rounded border border-neutral-200 text-red-400 hover:text-red-600 hover:border-red-300 transition-colors font-[family-name:var(--font-geist-mono)]"
+                          >
+                            Delete
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
