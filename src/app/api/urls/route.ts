@@ -57,12 +57,14 @@ export async function POST(request: Request) {
       "SELECT short_code, original_url, created_at FROM urls WHERE short_code = ?"
     ).get(shortCode) as { short_code: string; original_url: string; created_at: string };
 
-    const origin = new URL(request.url).origin;
+    const headers = new Headers(request.headers);
+    const proto = headers.get("x-forwarded-proto") ?? "https";
+    const host = headers.get("host") ?? new URL(request.url).host;
 
     const data: ShortenedUrl = {
       short_code: row.short_code,
       original_url: row.original_url,
-      short_url: `${origin}/${row.short_code}`,
+      short_url: `${proto}://${host}/${row.short_code}`,
       created_at: row.created_at,
     };
 
