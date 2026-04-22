@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
-import { db } from "@/lib/db";
 import { generateShortCode } from "@/lib/utils";
 import { ApiError } from "@/lib/errors";
 import { requireAuth } from "@/lib/auth-helpers";
+import { createUrl, listUserUrls } from "@/lib/url-store";
 import type { ShortenedUrl } from "@/lib/types";
 
 const ALIAS_PATTERN = /^[a-zA-Z0-9-]{3,30}$/;
@@ -88,35 +88,15 @@ export async function POST(request: Request) {
       shortCode = await generateShortCode();
     }
 
-    try {
-      db.prepare(
-        "INSERT INTO urls (short_code, original_url, user_id, expires_at) VALUES (?, ?, ?, ?)"
-      ).run(shortCode, originalUrl, user.id, expiresAt);
-    } catch (e: unknown) {
-      if (e instanceof Error && e.message.includes("UNIQUE constraint")) {
-        throw new ApiError(409, "ALIAS_TAKEN", "This alias is already in use");
-      }
-      throw e;
-    }
-
-    const row = db
-      .prepare(
-        "SELECT short_code, original_url, created_at, expires_at FROM urls WHERE short_code = ?"
-      )
-      .get(shortCode) as {
-      short_code: string;
-      original_url: string;
-      created_at: string;
-      expires_at: string | null;
-    };
+    const stored = await createUrl(shortCode, originalUrl, user.id, expiresAt);
 
     const origin = buildOrigin(request);
     const data: ShortenedUrl = {
-      short_code: row.short_code,
-      original_url: row.original_url,
-      short_url: `${origin}/${row.short_code}`,
-      created_at: row.created_at,
-      expires_at: row.expires_at,
+      short_code: shortCode,
+      original_url: stored.original_url,
+      short_url: `${origin}/${shortCode}`,
+      created_at: stored.created_at,
+      expires_at: stored.expires_at,
     };
 
     return NextResponse.json({ data }, { status: 201 });
@@ -142,26 +122,8 @@ export async function POST(request: Request) {
 export async function GET(request: Request) {
   try {
     const user = await requireAuth();
-
-    const rows = db
-      .prepare(
-        "SELECT short_code, original_url, created_at, expires_at FROM urls WHERE user_id = ? ORDER BY created_at DESC"
-      )
-      .all(user.id) as Array<{
-      short_code: string;
-      original_url: string;
-      created_at: string;
-      expires_at: string | null;
-    }>;
-
     const origin = buildOrigin(request);
-    const data: ShortenedUrl[] = rows.map((row) => ({
-      short_code: row.short_code,
-      original_url: row.original_url,
-      short_url: `${origin}/${row.short_code}`,
-      created_at: row.created_at,
-      expires_at: row.expires_at,
-    }));
+    const data = await listUserUrls(user.id, origin);
 
     return NextResponse.json({ data });
   } catch (error) {
