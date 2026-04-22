@@ -20,6 +20,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "par.loa — URL Shortener",
     description: "Shorten your URLs with par.loa",
+    siteName: "par.loa",
     url: "https://parloa-interview.vercel.app",
     type: "website",
   },

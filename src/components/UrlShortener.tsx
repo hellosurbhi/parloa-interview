@@ -38,7 +38,7 @@ export default function UrlShortener() {
       const json = await res.json();
       setUrls(json.data ?? []);
     } catch {
-      // silent
+      setError("Failed to load your URLs");
     }
   }, []);
 
@@ -98,7 +98,7 @@ export default function UrlShortener() {
         setUrls((prev) => prev.filter((u) => u.short_code !== shortCode));
       }
     } catch {
-      // silent
+      setError("Failed to delete link");
     }
   }
 
@@ -108,7 +108,7 @@ export default function UrlShortener() {
       setCopied(shortCode);
       setTimeout(() => setCopied(null), 2000);
     } catch {
-      // silent
+      setError("Failed to copy to clipboard");
     }
   }
 

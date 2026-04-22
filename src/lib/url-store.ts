@@ -15,6 +15,20 @@ function redis() {
   return r;
 }
 
+function parseStoredUrl(raw: unknown): StoredUrl {
+  const obj = typeof raw === "string" ? JSON.parse(raw) : raw;
+  if (
+    !obj ||
+    typeof obj !== "object" ||
+    typeof (obj as Record<string, unknown>).original_url !== "string" ||
+    typeof (obj as Record<string, unknown>).user_id !== "string" ||
+    typeof (obj as Record<string, unknown>).created_at !== "string"
+  ) {
+    throw new ApiError(500, "DATA_CORRUPT", "Stored URL data is malformed");
+  }
+  return obj as StoredUrl;
+}
+
 function isExpired(expiresAt: string | null): boolean {
   if (!expiresAt) return false;
   return new Date(expiresAt + "Z") <= new Date();
@@ -64,7 +78,7 @@ export async function getUrlForRedirect(
   const raw = await r.get<string>(`url:${shortCode}`);
   if (!raw) return null;
 
-  const data: StoredUrl = typeof raw === "string" ? JSON.parse(raw) : (raw as unknown as StoredUrl);
+  const data: StoredUrl = parseStoredUrl(raw);
 
   if (isExpired(data.expires_at)) {
     await r.del(`url:${shortCode}`);
@@ -104,7 +118,7 @@ export async function listUserUrls(
       continue;
     }
 
-    const data: StoredUrl = typeof raw === "string" ? JSON.parse(raw) : (raw as unknown as StoredUrl);
+    const data: StoredUrl = parseStoredUrl(raw);
 
     urls.push({
       short_code: shortCodes[i] as string,
@@ -133,7 +147,7 @@ export async function deleteUrl(
     throw new ApiError(404, "URL_NOT_FOUND", "Short URL not found");
   }
 
-  const data: StoredUrl = typeof raw === "string" ? JSON.parse(raw) : (raw as unknown as StoredUrl);
+  const data: StoredUrl = parseStoredUrl(raw);
 
   if (!data.user_id || data.user_id !== userId) {
     throw new ApiError(403, "FORBIDDEN", "You can only delete your own URLs");
