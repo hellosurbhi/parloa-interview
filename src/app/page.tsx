@@ -15,8 +15,7 @@ export default function Home() {
 
       <footer className="animate-reveal-delay-2 pt-10">
         <p className="text-xs text-neutral-400 font-[family-name:var(--font-geist-mono)]">
-          Next.js 14 &middot; TypeScript &middot; SQLite &middot; Redis &middot;
-          NextAuth
+          Next.js 14 &middot; TypeScript &middot; Redis &middot; NextAuth
         </p>
       </footer>
     </main>
