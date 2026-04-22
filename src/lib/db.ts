@@ -1,7 +1,11 @@
 import Database from "better-sqlite3";
 import path from "path";
 
-const db = new Database(path.join(process.cwd(), "data.db"));
+const dbPath = process.env.VERCEL
+  ? path.join("/tmp", "data.db")
+  : path.join(process.cwd(), "data.db");
+
+const db = new Database(dbPath);
 
 db.pragma("journal_mode = WAL");
 

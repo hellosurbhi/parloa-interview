@@ -48,12 +48,17 @@ export default function UrlShortener() {
         body: JSON.stringify({ url: trimmed }),
       });
 
-      const json = await res.json();
-
       if (!res.ok) {
-        setError(json.error?.message ?? "Something went wrong");
+        try {
+          const json = await res.json();
+          setError(json.error?.message ?? "Something went wrong");
+        } catch {
+          setError(`Server error (${res.status})`);
+        }
         return;
       }
+
+      const json = await res.json();
 
       const shortened: ShortenedUrl = json.data;
       const updated = [shortened, ...urls];
