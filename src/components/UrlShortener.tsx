@@ -112,29 +112,25 @@ export default function UrlShortener() {
     }
   }
 
-  if (status === "loading") {
+  if (status === "loading" || !session) {
     return (
-      <div className="flex-1 flex items-center justify-center">
-        <div className="h-8 w-8 rounded-full border-2 border-neutral-200 border-t-neutral-900 animate-spin" />
-      </div>
-    );
-  }
-
-  if (!session) {
-    return (
-      <div className="flex-1 flex flex-col items-center justify-center w-full max-w-2xl mx-auto animate-reveal">
-        <h1 className="text-[clamp(2rem,6vw,4rem)] font-extralight leading-tight tracking-[-0.03em] mb-2">
+      <div className="flex-1 flex flex-col justify-center w-full max-w-2xl mx-auto animate-reveal">
+        <h1 className="text-[clamp(2rem,6vw,4rem)] font-light leading-tight tracking-[-0.03em] mb-2">
           Shorten your URL
         </h1>
+        <div className="h-px bg-neutral-300 w-16 mb-6" />
         <p className="text-neutral-400 text-sm mb-8 font-[family-name:var(--font-geist-mono)]">
           Sign in to create and manage short links.
         </p>
-        <button
-          onClick={() => signIn("github")}
-          className="px-6 py-3 bg-neutral-900 text-white text-sm font-medium rounded-lg hover:bg-neutral-800 transition-colors"
-        >
-          Sign in with GitHub
-        </button>
+        <div>
+          <button
+            onClick={() => signIn("github")}
+            disabled={status === "loading"}
+            className="px-6 py-3 bg-neutral-900 text-white text-sm font-medium rounded-lg hover:bg-neutral-800 disabled:opacity-50 transition-colors"
+          >
+            {status === "loading" ? "Loading..." : "Sign in with GitHub"}
+          </button>
+        </div>
       </div>
     );
   }
