@@ -12,14 +12,7 @@ export default function UserMenu() {
   }
 
   if (!session) {
-    return (
-      <button
-        onClick={() => signIn("github")}
-        className="text-xs tracking-wide text-neutral-500 hover:text-neutral-900 transition-colors font-[family-name:var(--font-geist-mono)]"
-      >
-        Sign in with GitHub
-      </button>
-    );
+    return null;
   }
 
   return (
