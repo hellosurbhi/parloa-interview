@@ -17,6 +17,17 @@ const geistMono = localFont({
 export const metadata: Metadata = {
   title: "par.loa — URL Shortener",
   description: "Shorten your URLs with par.loa",
+  openGraph: {
+    title: "par.loa — URL Shortener",
+    description: "Shorten your URLs with par.loa",
+    url: "https://parloa-interview.vercel.app",
+    type: "website",
+  },
+  twitter: {
+    card: "summary",
+    title: "par.loa — URL Shortener",
+    description: "Shorten your URLs with par.loa",
+  },
 };
 
 export default function RootLayout({
