@@ -14,14 +14,16 @@ src/
     api/notes/[id]/route.ts -- GET, DELETE /api/notes/:id
   lib/
     db.ts                   -- connection + schema init
-    errors.ts               -- ApiError class
-    types.ts                -- shared request/response types
-    utils.ts                -- ID generation, validation helpers
+    utils.ts                -- ID generation
 ```
 
-## API Response Contract
+## Target Conventions
 
-All endpoints return a consistent envelope:
+Implement these patterns as the codebase grows.
+
+### API Response Contract
+
+All endpoints should return a consistent envelope:
 
 ```ts
 // Success
@@ -33,9 +35,9 @@ All endpoints return a consistent envelope:
 
 Status codes: 201 create, 200 read, 204 delete, 400 bad input, 404 not found, 410 expired, 500 server error.
 
-## Error Handling
+### Error Handling
 
-Typed errors, caught at the route level:
+Introduce a typed `ApiError` class in `lib/errors.ts`, caught at the route level:
 
 ```ts
 export class ApiError extends Error {
@@ -54,16 +56,13 @@ throw new ApiError(404, "NOTE_NOT_FOUND", "Note does not exist");
 
 Unexpected errors return 500 with `INTERNAL_ERROR`. Never leak stack traces to the client.
 
-## Input Validation
+### Input Validation
 
 Validate at the edge, fail fast. Every POST/PUT checks required fields and returns 400 with a descriptive error code before touching the database.
 
-```ts
-if (!body.content?.trim())
-  throw new ApiError(400, "CONTENT_REQUIRED", "Content cannot be empty");
-if (body.content.length > 50000)
-  throw new ApiError(400, "CONTENT_TOO_LARGE", "Max 50KB");
-```
+### Shared Types
+
+Extract request/response types into `lib/types.ts` as endpoints grow beyond the initial notes CRUD.
 
 ## Conventional Commits
 
@@ -71,7 +70,7 @@ if (body.content.length > 50000)
 
 ## Plan Mode
 
-When asked to plan, write to `plan.md`:
+When asked to plan, write to `PLAN.md`:
 
 1. Problem statement (one sentence)
 2. Data model (table name, columns, types, constraints)
@@ -81,7 +80,7 @@ When asked to plan, write to `plan.md`:
 
 ## Bug Tracking
 
-When a bug is found, append to `bugs.md`:
+When a bug is found, append to `BUGS.md`:
 
 | What broke | Root cause | Fix applied | Status |
 | ---------- | ---------- | ----------- | ------ |
