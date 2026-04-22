@@ -1,6 +1,6 @@
 # Parloa Interview
 
-Ephemeral notes API and UI built as a take-home project for Parloa.
+Scaffolded repo for a live systems design interview with Parloa. Built incrementally during the session.
 
 ## Tech Stack
 
