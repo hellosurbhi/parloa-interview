@@ -136,11 +136,12 @@ export default function UrlShortener() {
   }
 
   return (
-    <div className="flex-1 flex flex-col items-center justify-start w-full max-w-2xl mx-auto pt-16">
+    <div className="flex-1 flex flex-col justify-start w-full max-w-2xl mx-auto pt-16">
       <div className="w-full animate-reveal">
-        <h1 className="text-[clamp(2rem,6vw,4rem)] font-extralight leading-tight tracking-[-0.03em] mb-2">
+        <h1 className="text-[clamp(2rem,6vw,4rem)] font-light leading-tight tracking-[-0.03em] mb-2">
           Shorten your URL
         </h1>
+        <div className="h-px bg-neutral-300 w-16 mb-6" />
         <p className="text-neutral-400 text-sm mb-8 font-[family-name:var(--font-geist-mono)]">
           Paste a link, optionally set an alias and expiry.
         </p>
