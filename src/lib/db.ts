@@ -18,6 +18,14 @@ function initDb() {
   db.exec(`
     CREATE INDEX IF NOT EXISTS idx_notes_expires_at ON notes (expires_at)
   `);
+
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS urls (
+      short_code TEXT PRIMARY KEY,
+      original_url TEXT NOT NULL,
+      created_at TEXT DEFAULT (datetime('now'))
+    )
+  `);
 }
 
 initDb();

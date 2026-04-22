@@ -14,8 +14,8 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Parloa Interview — Surbhi",
-  description: "Let's get Surbhi hired",
+  title: "par.loa — URL Shortener",
+  description: "Shorten your URLs with par.loa",
 };
 
 export default function RootLayout({
