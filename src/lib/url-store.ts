@@ -36,12 +36,10 @@ export async function createUrl(
     expires_at: expiresAt,
   };
 
-  const existing = await r.get(`url:${shortCode}`);
-  if (existing) {
+  const wasSet = await r.set(`url:${shortCode}`, JSON.stringify(data), { nx: true });
+  if (!wasSet) {
     throw new ApiError(409, "ALIAS_TAKEN", "This alias is already in use");
   }
-
-  await r.set(`url:${shortCode}`, JSON.stringify(data));
 
   if (expiresAt) {
     const ttl = Math.max(
