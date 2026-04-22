@@ -84,19 +84,20 @@ export async function POST(request: Request) {
     let shortCode: string;
     if (body.custom_alias) {
       shortCode = validateAlias(body.custom_alias);
-      const existing = db
-        .prepare("SELECT 1 FROM urls WHERE short_code = ?")
-        .get(shortCode);
-      if (existing) {
-        throw new ApiError(409, "ALIAS_TAKEN", "This alias is already in use");
-      }
     } else {
       shortCode = await generateShortCode();
     }
 
-    db.prepare(
-      "INSERT INTO urls (short_code, original_url, user_id, expires_at) VALUES (?, ?, ?, ?)"
-    ).run(shortCode, originalUrl, user.id, expiresAt);
+    try {
+      db.prepare(
+        "INSERT INTO urls (short_code, original_url, user_id, expires_at) VALUES (?, ?, ?, ?)"
+      ).run(shortCode, originalUrl, user.id, expiresAt);
+    } catch (e: unknown) {
+      if (e instanceof Error && e.message.includes("UNIQUE constraint")) {
+        throw new ApiError(409, "ALIAS_TAKEN", "This alias is already in use");
+      }
+      throw e;
+    }
 
     const row = db
       .prepare(
