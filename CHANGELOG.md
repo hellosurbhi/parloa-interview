@@ -1,5 +1,31 @@
 # Changelog
 
+## Ship-it production hardening
+
+### What changed
+- Replaced Vercel default favicon with custom SVG lettermark
+- Added Open Graph and Twitter card metadata for social sharing previews
+- Created branded 404 page matching the app's design language
+- Fixed silent error catches in UrlShortener — network/clipboard failures now show user-facing messages
+- Added runtime validation for Redis JSON parsing (replaced unsafe type casts)
+- Split UrlShortener (301 lines) into AuthPrompt, UrlForm, UrlList sub-components
+- Added env var validation at startup — missing GITHUB_ID/SECRET throws a clear error instead of cryptic crash
+- Removed dead code: db.ts (SQLite), unused generateId, better-sqlite3 and nanoid dependencies
+
+### Files affected
+- `src/app/icon.svg` — new custom favicon
+- `src/app/not-found.tsx` — new branded 404 page
+- `src/app/layout.tsx` — OG + Twitter metadata
+- `src/components/AuthPrompt.tsx` — extracted sign-in prompt
+- `src/components/UrlForm.tsx` — extracted URL creation form
+- `src/components/UrlList.tsx` — extracted URL table
+- `src/components/UrlShortener.tsx` — simplified orchestrator
+- `src/lib/env.ts` — env var validation
+- `src/lib/auth.ts` — uses env.ts for GitHub credentials
+- `src/lib/url-store.ts` — parseStoredUrl validation function
+- `src/lib/utils.ts` — removed unused generateId and nanoid import
+- `package.json` — removed better-sqlite3, nanoid
+
 ## Security hardening
 
 ### What changed

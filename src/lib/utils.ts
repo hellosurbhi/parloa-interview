@@ -1,13 +1,8 @@
-import { nanoid } from "nanoid";
 import { getRedis } from "./redis";
 
 const BASE62 = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 const COUNTER_KEY = "url:id_counter";
 const COUNTER_START = 100000;
-
-export function generateId(): string {
-  return nanoid(10);
-}
 
 export function base62Encode(num: number): string {
   if (num === 0) return BASE62[0];
