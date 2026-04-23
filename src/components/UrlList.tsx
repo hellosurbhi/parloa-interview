@@ -3,6 +3,17 @@
 import { useState } from "react";
 import type { ShortenedUrl } from "@/lib/types";
 
+function prettyUrl(fullUrl: string): string {
+  try {
+    const u = new URL(fullUrl);
+    const host = u.hostname.replace(/^www\./, "");
+    const path = u.pathname === "/" ? "" : u.pathname;
+    return `${host}${path}${u.search}`;
+  } catch {
+    return fullUrl;
+  }
+}
+
 function timeUntil(expiresAt: string): string {
   const diff = new Date(expiresAt + "Z").getTime() - Date.now();
   if (diff <= 0) return "Expired";
@@ -87,11 +98,17 @@ export default function UrlList({ urls, onDelete, onError }: UrlListProps) {
                         /{url.short_code}
                       </a>
                     </td>
-                    <td
-                      className="px-4 py-3 max-w-[200px] truncate text-neutral-500 hidden sm:table-cell"
-                      title={url.original_url}
-                    >
-                      {url.original_url}
+                    <td className="px-4 py-3 max-w-[200px] text-neutral-500 hidden sm:table-cell">
+                      <a
+                        href={url.original_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        title={url.original_url}
+                        aria-label={`Open original URL: ${url.original_url}`}
+                        className="block truncate hover:text-neutral-900 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2 rounded-sm"
+                      >
+                        {prettyUrl(url.original_url)}
+                      </a>
                     </td>
                     <td className="px-4 py-3">
                       {expiryText ? (
