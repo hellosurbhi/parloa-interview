@@ -1,5 +1,16 @@
 # Changelog
 
+## fix: copy button layout shift, select caret spacing, bare URL acceptance
+
+### What changed
+- Copy button in URL table is now pinned to `w-[4.5rem]` — switching "Copy" → "Copied" no longer reflows the table columns
+- Expiry `<select>` now uses `pl-4 pr-8` instead of `px-4` so the option text has breathing room before the native dropdown caret
+- URL input changed from `type="url"` to `type="text"`; bare hostnames like `www.example.com` are auto-prefixed with `https://` before submission
+
+### Files affected
+- `src/components/UrlList.tsx` — fixed-width Copy button
+- `src/components/UrlForm.tsx` — select padding, input type, protocol normalization
+
 ## Accessibility improvements (WCAG AA)
 
 ### What changed
