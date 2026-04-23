@@ -1,5 +1,16 @@
 # Changelog
 
+## feat: pretty-print original URL in list, make it a clickable link
+
+### What changed
+- The "Original" column now hides the `https://` protocol and leading `www.` for a cleaner, Chrome-address-bar-style display
+- The cell is now an anchor tag that opens the full original URL in a new tab — keyboard focusable with a visible focus ring
+- Full URL is still surfaced three ways without any layout shift: `title` attribute on hover, `aria-label` for screen readers, and the link's `href` itself
+- Kept `max-w-[200px]` with truncation — no expand/collapse, so zero CLS
+
+### Files affected
+- `src/components/UrlList.tsx` — added `prettyUrl()` helper, changed the Original cell to a truncating anchor
+
 ## fix: copy button layout shift, select caret spacing, bare URL acceptance
 
 ### What changed
