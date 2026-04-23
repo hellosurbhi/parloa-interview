@@ -116,7 +116,7 @@ export default function UrlList({ urls, onDelete, onError }: UrlListProps) {
                           onClick={() =>
                             handleCopy(url.short_url, url.short_code)
                           }
-                          className="text-xs px-3 py-2 rounded border border-neutral-200 text-neutral-600 hover:text-neutral-900 hover:border-neutral-300 transition-colors font-[family-name:var(--font-geist-mono)] focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2"
+                          className="w-[4.5rem] text-center text-xs px-3 py-2 rounded border border-neutral-200 text-neutral-600 hover:text-neutral-900 hover:border-neutral-300 transition-colors font-[family-name:var(--font-geist-mono)] focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2"
                         >
                           {copied === url.short_code ? "Copied" : "Copy"}
                         </button>

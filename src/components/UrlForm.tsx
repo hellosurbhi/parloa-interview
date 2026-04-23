@@ -32,10 +32,12 @@ export default function UrlForm({ onCreated, onError }: UrlFormProps) {
       return;
     }
 
+    const normalized = /^https?:\/\//i.test(trimmed) ? trimmed : `https://${trimmed}`;
+
     setIsLoading(true);
 
     try {
-      const body: Record<string, unknown> = { url: trimmed };
+      const body: Record<string, unknown> = { url: normalized };
       if (customAlias.trim()) body.custom_alias = customAlias.trim();
       if (expiresIn > 0) body.expires_in = expiresIn;
 
@@ -73,7 +75,7 @@ export default function UrlForm({ onCreated, onError }: UrlFormProps) {
         <label htmlFor="url-input" className="sr-only">URL to shorten</label>
         <input
           id="url-input"
-          type="url"
+          type="text"
           value={inputUrl}
           onChange={(e) => setInputUrl(e.target.value)}
           placeholder="https://example.com/some/long/url?with=params"
@@ -105,7 +107,7 @@ export default function UrlForm({ onCreated, onError }: UrlFormProps) {
           id="expiry-select"
           value={expiresIn}
           onChange={(e) => setExpiresIn(Number(e.target.value))}
-          className="px-4 py-2.5 rounded-lg border border-neutral-200 bg-white text-sm font-[family-name:var(--font-geist-mono)] focus:outline-none focus:ring-2 focus:ring-neutral-900 focus:border-transparent transition-shadow"
+          className="pl-4 pr-8 py-2.5 rounded-lg border border-neutral-200 bg-white text-sm font-[family-name:var(--font-geist-mono)] focus:outline-none focus:ring-2 focus:ring-neutral-900 focus:border-transparent transition-shadow"
           disabled={isLoading}
         >
           {EXPIRY_OPTIONS.map((opt) => (
