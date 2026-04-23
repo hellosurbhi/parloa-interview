@@ -79,13 +79,13 @@ export default function UrlForm({ onCreated, onError }: UrlFormProps) {
           value={inputUrl}
           onChange={(e) => setInputUrl(e.target.value)}
           placeholder="https://example.com/some/long/url?with=params"
-          className="flex-1 px-4 py-3 rounded-lg border border-neutral-200 bg-white text-sm font-[family-name:var(--font-geist-mono)] focus:outline-none focus:ring-2 focus:ring-neutral-900 focus:border-transparent transition-shadow"
+          className="flex-1 px-4 py-3 rounded-lg border border-neutral-300 bg-white text-base font-[family-name:var(--font-geist-mono)] focus:outline-none focus:ring-2 focus:ring-neutral-900 focus:border-transparent transition-shadow"
           disabled={isLoading}
         />
         <button
           type="submit"
           disabled={isLoading}
-          className="px-6 py-3 bg-neutral-900 text-white text-sm font-medium rounded-lg hover:bg-neutral-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors shrink-0 focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2"
+          className="w-36 py-3 bg-neutral-900 text-white text-sm font-medium rounded-lg hover:bg-neutral-800 active:scale-[0.97] disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100 transition-[transform,background-color,box-shadow,opacity] duration-150 ease-out shrink-0 focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2"
         >
           {isLoading ? "..." : "Shorten"}
         </button>
@@ -99,7 +99,7 @@ export default function UrlForm({ onCreated, onError }: UrlFormProps) {
           value={customAlias}
           onChange={(e) => setCustomAlias(e.target.value)}
           placeholder="Custom alias (optional)"
-          className="flex-1 px-4 py-2.5 rounded-lg border border-neutral-200 bg-white text-sm font-[family-name:var(--font-geist-mono)] focus:outline-none focus:ring-2 focus:ring-neutral-900 focus:border-transparent transition-shadow"
+          className="flex-1 px-4 py-2.5 rounded-lg border border-dashed border-neutral-200 bg-neutral-50 text-sm text-neutral-600 placeholder:text-neutral-400 font-[family-name:var(--font-geist-mono)] focus:outline-none focus:ring-2 focus:ring-neutral-900 focus:border-transparent focus:bg-white transition-shadow"
           disabled={isLoading}
         />
         <label htmlFor="expiry-select" className="sr-only">Expiration</label>
@@ -107,7 +107,7 @@ export default function UrlForm({ onCreated, onError }: UrlFormProps) {
           id="expiry-select"
           value={expiresIn}
           onChange={(e) => setExpiresIn(Number(e.target.value))}
-          className="pl-4 pr-8 py-2.5 rounded-lg border border-neutral-200 bg-white text-sm font-[family-name:var(--font-geist-mono)] focus:outline-none focus:ring-2 focus:ring-neutral-900 focus:border-transparent transition-shadow"
+          className="select-chevron appearance-none shrink-0 w-36 pl-4 pr-10 py-2.5 rounded-lg border border-dashed border-neutral-200 bg-neutral-50 text-sm text-neutral-600 font-[family-name:var(--font-geist-mono)] focus:outline-none focus:ring-2 focus:ring-neutral-900 focus:border-transparent focus:bg-white transition-shadow"
           disabled={isLoading}
         >
           {EXPIRY_OPTIONS.map((opt) => (

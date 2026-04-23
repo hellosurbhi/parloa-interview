@@ -18,7 +18,7 @@ export default function AuthPrompt() {
         <button
           onClick={() => signIn("github")}
           disabled={status === "loading"}
-          className="px-6 py-3 bg-neutral-900 text-white text-sm font-medium rounded-lg hover:bg-neutral-800 disabled:opacity-50 transition-colors focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2"
+          className="px-6 py-3 bg-neutral-900 text-white text-sm font-medium rounded-lg hover:bg-neutral-800 active:scale-[0.97] disabled:opacity-50 disabled:active:scale-100 transition-[transform,background-color,opacity] duration-150 ease-out focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2"
         >
           {status === "loading" ? "Loading..." : "Sign in with GitHub"}
         </button>

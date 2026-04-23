@@ -40,3 +40,10 @@ data.db
 data.db-wal
 data.db-shm
 .gstack/
+
+# skills scaffolding (installed via `npx skills add`)
+.agents/
+.kiro/
+.claude/skills/
+/skills/
+skills-lock.json

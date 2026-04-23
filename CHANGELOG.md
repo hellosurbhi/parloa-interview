@@ -1,5 +1,45 @@
 # Changelog
 
+## polish: form styling, press feedback, motion preferences, dropdown chevron
+
+### What changed
+
+Applied a full design-engineering pass to the site. No new dependencies.
+
+**Form styling & hierarchy**
+- URL input reads as primary: `text-base`, darker `border-neutral-300`
+- Custom alias and expiry select read as optional: dashed border, `bg-neutral-50`, muted `text-neutral-600`, clearing to white on focus
+- Shorten button and expiry select share `w-36` so their right edges align between rows
+- Expiry select's native dropdown arrow replaced with a CSS `background-image` chevron positioned at `right 0.875rem center` — standard design-system pattern, no overlay SVG or wrapper div
+
+**Press feedback**
+- Every pressable element (Shorten, Copy, Delete, Sign-in, Back home) scales to `0.97` on `:active` with a 150ms ease-out transition. Disabled states suppress the scale.
+
+**State transitions**
+- Copy label cross-fades (opacity + 2px blur) between "Copy" and "Copied" via two stacked spans with `aria-hidden` toggling
+- New URL rows fade in from `translateY(-6px)` over 200ms; deletions stage through a 160ms exit transition before unmount
+- Error alert uses the row-enter animation instead of popping in
+- Line-grow keyframe starts from `scaleX(0.05)` — nothing in the real world animates from nothing
+
+**Motion & accessibility**
+- `prefers-reduced-motion` collapses reveal/line/row animations to opacity-only
+- Added `--ease-out-strong: cubic-bezier(0.23, 1, 0.32, 1)` CSS variable
+- 404 "Back home" link gained press feedback and a keyboard focus ring
+
+**Tooling**
+- Gitignored skills scaffolding: `.agents/`, `.kiro/`, `.claude/skills/`, `skills/`, `skills-lock.json`
+
+### Files affected
+
+- `src/app/globals.css` — CSS variable, keyframe fix, reduced-motion block, row-enter/row-exit utilities, `.select-chevron`
+- `src/components/UrlForm.tsx` — input hierarchy, width parity, chevron via background-image, Shorten press feedback
+- `src/components/UrlList.tsx` — Copy blur-swap, Delete staged exit, row enter/exit, press feedback
+- `src/components/UrlShortener.tsx` — error alert fade-in
+- `src/components/AuthPrompt.tsx` — sign-in press feedback
+- `src/components/UserMenu.tsx` — explicit transition timing
+- `src/app/not-found.tsx` — press feedback + focus ring
+- `.gitignore` — skills scaffolding
+
 ## feat: pretty-print original URL in list, make it a clickable link
 
 ### What changed

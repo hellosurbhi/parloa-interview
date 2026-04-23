@@ -64,7 +64,7 @@ export default function UrlShortener() {
         <UrlForm onCreated={handleCreated} onError={handleError} />
 
         {error && (
-          <p className="text-red-500 text-sm mb-4" role="alert">
+          <p className="text-red-500 text-sm mb-4 animate-row-enter" role="alert">
             {error}
           </p>
         )}

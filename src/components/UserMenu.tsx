@@ -31,7 +31,7 @@ export default function UserMenu() {
       </span>
       <button
         onClick={() => signOut()}
-        className="text-xs text-neutral-500 hover:text-neutral-700 transition-colors font-[family-name:var(--font-geist-mono)] focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2 rounded"
+        className="text-xs text-neutral-500 hover:text-neutral-700 transition-colors duration-150 ease-out font-[family-name:var(--font-geist-mono)] focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2 rounded"
       >
         Sign out
       </button>

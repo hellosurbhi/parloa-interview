@@ -31,6 +31,7 @@ interface UrlListProps {
 
 export default function UrlList({ urls, onDelete, onError }: UrlListProps) {
   const [copied, setCopied] = useState<string | null>(null);
+  const [removing, setRemoving] = useState<Set<string>>(new Set());
 
   async function handleCopy(shortUrl: string, shortCode: string) {
     try {
@@ -40,6 +41,22 @@ export default function UrlList({ urls, onDelete, onError }: UrlListProps) {
     } catch {
       onError("Failed to copy to clipboard");
     }
+  }
+
+  function handleDelete(shortCode: string) {
+    setRemoving((prev) => {
+      const next = new Set(prev);
+      next.add(shortCode);
+      return next;
+    });
+    setTimeout(() => {
+      onDelete(shortCode);
+      setRemoving((prev) => {
+        const next = new Set(prev);
+        next.delete(shortCode);
+        return next;
+      });
+    }, 160);
   }
 
   return (
@@ -81,12 +98,16 @@ export default function UrlList({ urls, onDelete, onError }: UrlListProps) {
                   : null;
                 const isExpired = expiryText === "Expired";
 
+                const isRemoving = removing.has(url.short_code);
+
                 return (
                   <tr
                     key={url.short_code}
                     className={`border-b border-neutral-100 last:border-0 ${
                       i % 2 === 1 ? "bg-neutral-50/50" : "bg-white"
-                    } ${isExpired ? "opacity-50" : ""}`}
+                    } ${isExpired && !isRemoving ? "opacity-50" : ""} ${
+                      isRemoving ? "row-exit" : "animate-row-enter"
+                    }`}
                   >
                     <td className="px-4 py-3">
                       <a
@@ -133,13 +154,33 @@ export default function UrlList({ urls, onDelete, onError }: UrlListProps) {
                           onClick={() =>
                             handleCopy(url.short_url, url.short_code)
                           }
-                          className="w-[4.5rem] text-center text-xs px-3 py-2 rounded border border-neutral-200 text-neutral-600 hover:text-neutral-900 hover:border-neutral-300 transition-colors font-[family-name:var(--font-geist-mono)] focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2"
+                          className="relative w-[4.5rem] text-center text-xs px-3 py-2 rounded border border-neutral-200 text-neutral-600 hover:text-neutral-900 hover:border-neutral-300 active:scale-[0.97] transition-[transform,color,border-color] duration-150 ease-out font-[family-name:var(--font-geist-mono)] focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2"
                         >
-                          {copied === url.short_code ? "Copied" : "Copy"}
+                          <span
+                            aria-hidden={copied === url.short_code}
+                            className={`inline-block transition-[opacity,filter] duration-150 ease-out ${
+                              copied === url.short_code
+                                ? "opacity-0 blur-[2px]"
+                                : "opacity-100 blur-0"
+                            }`}
+                          >
+                            Copy
+                          </span>
+                          <span
+                            aria-hidden={copied !== url.short_code}
+                            className={`absolute inset-0 flex items-center justify-center transition-[opacity,filter] duration-150 ease-out ${
+                              copied === url.short_code
+                                ? "opacity-100 blur-0"
+                                : "opacity-0 blur-[2px]"
+                            }`}
+                          >
+                            Copied
+                          </span>
                         </button>
                         <button
-                          onClick={() => onDelete(url.short_code)}
-                          className="text-xs px-3 py-2 rounded border border-neutral-200 text-red-500 hover:text-red-600 hover:border-red-300 transition-colors font-[family-name:var(--font-geist-mono)] focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2"
+                          onClick={() => handleDelete(url.short_code)}
+                          disabled={isRemoving}
+                          className="text-xs px-3 py-2 rounded border border-neutral-200 text-red-500 hover:text-red-600 hover:border-red-300 active:scale-[0.97] disabled:opacity-50 disabled:active:scale-100 transition-[transform,color,border-color,opacity] duration-150 ease-out font-[family-name:var(--font-geist-mono)] focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2"
                         >
                           Delete
                         </button>
