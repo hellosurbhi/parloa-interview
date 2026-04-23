@@ -3,7 +3,7 @@
 Built during (and after) a live systems design interview with Parloa.
 
 Live: https://parloa-interview.vercel.app  
-GitHub: https://github.com/surbhiroy/parloa-interview
+GitHub: https://github.com/hellosurbhi/parloa-interview
 
 ## What it does
 
